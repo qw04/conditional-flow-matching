@@ -37,6 +37,8 @@ def sample_moons(n):
     x0, _ = generate_moons(n, noise=0.2)
     return x0 * 3 - 1
 
+def sample_normal(n):
+    return torch.randn(n, 2)
 
 def sample_8gaussians(n):
     return eight_normal_sample(n, 2, scale=5, var=0.1).float()
@@ -53,14 +55,12 @@ class torch_wrapper(torch.nn.Module):
         return self.model(torch.cat([x, t.repeat(x.shape[0])[:, None]], 1))
 
 
-def plot_trajectories(traj):
+def plot_trajectories(traj, path):
     """Plot trajectories of some selected samples."""
     n = 2000
     plt.figure(figsize=(6, 6))
-    plt.scatter(traj[0, :n, 0], traj[0, :n, 1], s=10, alpha=0.8, c="black")
-    plt.scatter(traj[:, :n, 0], traj[:, :n, 1], s=0.2, alpha=0.2, c="olive")
+    # plt.scatter(traj[0, :n, 0], traj[0, :n, 1], s=10, alpha=0.8, c="black")
+    # plt.scatter(traj[:, :n, 0], traj[:, :n, 1], s=0.2, alpha=0.2, c="olive")
     plt.scatter(traj[-1, :n, 0], traj[-1, :n, 1], s=4, alpha=1, c="blue")
-    plt.legend(["Prior sample z(S)", "Flow", "z(0)"])
-    plt.xticks([])
-    plt.yticks([])
-    plt.show()
+    # plt.legend(["Prior sample z(S)", "Flow", "z(0)"]))
+    plt.savefig(path)
